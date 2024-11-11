@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
+use Faker\Factory as FakerFactory;
 use App\Services\TaskService;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Cache;
@@ -17,12 +18,13 @@ class CreatingTaskTest extends TestCase
 
     protected TaskService $TaskService;
 
+    protected $faker;
     protected function setUp(): void
     {
         parent::setUp();
-    
-        // Seed roles explicitly before each test
-        // $this->artisan('db:seed', ['--class' => 'RoleSeeder']);
+        $this->TaskService = new TaskService();
+        $this->faker = FakerFactory::create(); // إنشاء كائن Faker
+
     }
     
     public function test_create_task_success()
@@ -31,7 +33,7 @@ class CreatingTaskTest extends TestCase
     
         $adminUser = User::factory()->create([
             'role_id' => $adminRole->id,
-            'email' => 'admin'.random_int(0,9).'@gmail.com',
+            'email' => $this->faker->unique()->safeEmail,
         ]);
     
         $token = JWTAuth::fromUser($adminUser);

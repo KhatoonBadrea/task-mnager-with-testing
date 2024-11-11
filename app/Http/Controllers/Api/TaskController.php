@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Services\TaskService;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Http\Traits\ApiResponseTrait;
 // use App\Http\Requests\updateStatusRequest;
+use App\Http\Traits\ApiResponseTrait;
 use App\Http\Requests\Task\StoreTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Http\Requests\Task\updateTypeRequest;
@@ -100,10 +101,17 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
-        $this->authorize('delete', $task);
+        try{
 
-        $task->delete();
-        return $this->success();
+            
+            $this->authorize('delete', $task);
+            
+            $task->delete();
+            return $this->success();
+        } catch (\Exception $e) {
+            Log::error('Error in TaskController@destroy' . $e->getMessage());
+            return $this->errorResponse('An error occurred: ' . 'there is an error in the server', [], 500);
+        }
     }
 
 
