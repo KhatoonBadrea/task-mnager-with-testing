@@ -50,7 +50,7 @@ class CreatingTaskTest extends TestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
             ->postJson('/api/tasks', $taskData);
     
-        $response->assertStatus(200);
+        $response->assertStatus(201);
         $this->assertDatabaseHas('tasks', ['title' => 'Test Task']);
         $this->assertFalse(Cache::has('tasks'));
     }
