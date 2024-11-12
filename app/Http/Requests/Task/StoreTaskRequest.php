@@ -5,6 +5,7 @@ namespace App\Http\Requests\Task;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreTaskRequest extends FormRequest
@@ -65,9 +66,12 @@ class StoreTaskRequest extends FormRequest
             'status' => 'error',
             'message' => 'please make sure for the inputs  ',
             'errors' => $validator->errors(),
+    ], 400));
 
-        ]));
-    }
+    throw new ValidationException($validator, $response);
+}
+
+ 
 
 
     public function attributes()

@@ -50,9 +50,9 @@ class TaskController extends Controller
         $validationdata = $request->validated();
         $response = $this->taskService->create_task($validationdata);
         if (!$response) {
-            return $this->error();
+            return $this->error(null, 'Failed to create task', 400);
         } else {
-            return $this->success();
+            return $this->success(null, 'Task created successfully', 201);
         }
     }
 

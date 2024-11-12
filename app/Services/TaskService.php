@@ -9,10 +9,11 @@ use Illuminate\Support\Facades\Log;
 use App\Events\StatusUpdateLogEvent;
 use App\Http\Resources\TaskResource;
 use App\Http\Traits\ApiResponseTrait;
+use Illuminate\Support\Facades\Cache;
 use App\Events\TaskStatusUpdatedEvent;
+use App\Http\Requests\Task\StoreTaskRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\RelationNotFoundException;
-use Illuminate\Support\Facades\Cache;
 
 class TaskService
 {
@@ -117,7 +118,6 @@ class TaskService
         $status = is_null(Arr::get($data, 'depends_on')) ? 'Open' : 'Blocked';
 
         try {
-
             $task = Task::create([
                 'title' => $data['title'],
                 'description' => $data['description'],
