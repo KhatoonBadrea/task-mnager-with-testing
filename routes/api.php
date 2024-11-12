@@ -40,8 +40,8 @@ Route::group(['middleware' => ['auth:api', 'admin']], function () {
     Route::get('restore/{id}', [TaskController::class, 'restoreTask']);
     Route::put('tasks/{task}/assigne', [TaskController::class, 'update_assigned_to']);
 });
-Route::apiResource('tasks', TaskController::class)->middleware('admin');
-Route::apiResource('tasks/{task}', [TaskController::class, 'destroy']);
+Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->middleware('auth:api');
+Route::apiResource('tasks', TaskController::class)->except(['destroy']);
 
 Route::group(['middleware' => ['auth:api']], function () {
 

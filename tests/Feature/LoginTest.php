@@ -9,13 +9,12 @@ use App\Services\AuthService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class LoginTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-    use RefreshDatabase;
+   
+    use DatabaseTransactions;
 
     protected AuthService $authService;
 

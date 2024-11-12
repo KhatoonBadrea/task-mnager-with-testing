@@ -4,16 +4,32 @@ use Tests\TestCase;
 use App\Models\Role;
 use App\Models\Task;
 use App\Models\User;
+use App\Services\TaskService;
+use Faker\Factory as FakerFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class DeletingTaskTest extends TestCase
+class DeleteTaskTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
+    protected $taskService;
+    protected $faker;
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->taskService = new TaskService();
+        $this->faker = FakerFactory::create(); 
+
+    }
 
     public function test_authorized_user_can_delete_task()
     {
-        $adminRole = Role::where('name', 'Admin')->firstOrCreate(['name' => 'Admin','description'=>'kkkkkkkk']);
-        $adminUser = User::factory()->create(['role_id' => $adminRole->id]);
+        $adminRole = Role::where('name', 'Admin')->first();
+
+        $adminUser = User::factory()->create([
+            'role_id' => $adminRole->id,
+            'email' => $this->faker->unique()->safeEmail,
+        ]);
 
         $token = auth()->login($adminUser);
         
