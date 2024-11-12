@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class LoginTest extends TestCase
 {
-   
+
     use DatabaseTransactions;
 
     protected AuthService $authService;
@@ -37,12 +37,11 @@ class LoginTest extends TestCase
             'password' => 'password123',
         ];
 
-        $response = $this->authService->login($credentials);
+        $result = $this->authService->login($credentials);
 
-        $this->assertArrayHasKey('access_token', $response);
-        $this->assertEquals($response['token_type'], 'bearer');
-        $this->assertEquals($response['user']->email, $user->email);
+        $this->assertIsString($result);
     }
+
 
     public function test_user_cannot_login_with_invalid_credentials()
     {
@@ -51,16 +50,14 @@ class LoginTest extends TestCase
             'password' => Hash::make('password123'),
             'role_id' => Role::where('name', 'Developer')->first()->id,
         ]);
-    
+
         $invalidCredentials = [
             'email' => 'test@example.com',
             'password' => 'wrongpassword',
         ];
-    
-        $response = $this->authService->login($invalidCredentials);
-    
-        $this->assertIsArray($response);
-        $this->assertEquals('Unauthorized', $response['message']);
+
+        $result = $this->authService->login($invalidCredentials);
+
+        $this->assertFalse($result);
     }
-    
 }

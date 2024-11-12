@@ -15,13 +15,17 @@ class AuthService
 
     public function login(array $credentials)
     {
+        try {
+            if ($token = auth()->attempt($credentials)) {
+                return $token;
+            }
 
-        if (!$token = auth()->attempt($credentials)) {
-            return ['message' => 'Unauthorized'];
+            return false;
+        } catch (\Exception $e) {
+            return false;
         }
-
-        return $this->createNewToken($token);
     }
+
 
 
 

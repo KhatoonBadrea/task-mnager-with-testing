@@ -43,4 +43,12 @@ class Controller extends BaseController
             'data' => $data,
         ], $status);
     }
+    public static function Unauthoriz($data = null, $message = 'Unauthorized', $status = 403)
+    {
+        return response()->json([
+            'status' => 'Unauthorized',
+            'message' => $message,
+            'data' => $data,
+        ], $status);
+    }
 }

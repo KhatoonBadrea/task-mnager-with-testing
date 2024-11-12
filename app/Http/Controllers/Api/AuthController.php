@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Services\AuthService;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use App\Http\Traits\ApiResponseTrait;
 
 class AuthController extends Controller
 {
     use ApiResponseTrait;
 
-    protected $authService; 
+    protected $authService;
 
     public function __construct(AuthService $authService)
     {
@@ -23,8 +23,11 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $result = $this->authService->login($request->validated());
-       
-        return response()->json($result);
+
+        if (!$result) {
+            return $this->Unauthoriz();
+        } else
+            return $this->success($result);
     }
 
     public function register(RegisterRequest $request)
